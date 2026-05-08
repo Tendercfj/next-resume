@@ -49,6 +49,12 @@ DATABASE_URL=...
 
 页面内部表单可复用 `app/actions/contact.ts` 中的 `submitContactMessage` Server Action。
 
+服务端数据库接口按经典三层组织：
+
+- `lib/dao/`：只负责 Neon/PostgreSQL SQL 查询和 Row 类型。
+- `lib/services/`：负责输入校验、业务组合、数据映射和写入流程。
+- `lib/controllers/`：负责 Route Handler / Server Action 的请求解析、响应格式和错误码。
+
 ## Scripts
 
 ```bash

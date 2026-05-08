@@ -1,4 +1,4 @@
-import type { PublishedResume } from "@/lib/resume-data";
+import type { PublishedResume } from "@/lib/resume/types";
 
 export const fallbackResume: PublishedResume = {
   profile: {

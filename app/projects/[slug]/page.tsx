@@ -20,10 +20,8 @@ import {
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { fallbackResume } from "@/lib/fallback-resume";
-import {
-  getPublishedProjectBySlug,
-  type ResumeProject,
-} from "@/lib/resume-data";
+import type { ResumeProject } from "@/lib/resume/types";
+import { getPublishedProjectBySlug } from "@/lib/services/resume-service";
 
 export const dynamic = "force-dynamic";
 
