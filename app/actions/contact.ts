@@ -1,3 +1,5 @@
+"use server";
+
 import {
   contactInputFromFormData,
   createContactMessage,
@@ -13,8 +15,6 @@ export type ContactActionResult = {
 export async function submitContactMessage(
   formData: FormData,
 ): Promise<ContactActionResult> {
-  "use server";
-
   try {
     await createContactMessage(contactInputFromFormData(formData));
 
@@ -38,4 +38,11 @@ export async function submitContactMessage(
       message: "消息暂时无法提交，请稍后再试",
     };
   }
+}
+
+export async function submitContactMessageWithState(
+  _previousState: ContactActionResult,
+  formData: FormData,
+): Promise<ContactActionResult> {
+  return submitContactMessage(formData);
 }
