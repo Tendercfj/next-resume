@@ -1,4 +1,4 @@
-import type { LucideIcon } from "lucide-react";
+import type { LucideIcon } from 'lucide-react';
 import {
   ArrowUpRight,
   Globe2,
@@ -6,16 +6,16 @@ import {
   MapPin,
   Phone,
   Sparkles,
-} from "lucide-react";
+} from 'lucide-react';
 
-import { PrintButton } from "@/components/print-button";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
-import { getInitials } from "@/lib/resume/formatters";
-import { getProfileLinks } from "@/lib/resume/profile-links";
-import type { ResumeLink, ResumeProfile } from "@/lib/resume/types";
+import { PrintButton } from '@/components/print-button';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Separator } from '@/components/ui/separator';
+import { getInitials } from '@/lib/resume/formatters';
+import { getProfileLinks } from '@/lib/resume/profile-links';
+import type { ResumeLink, ResumeProfile } from '@/lib/resume/types';
 
 type ResumeHeaderProps = {
   profile: ResumeProfile;
@@ -47,7 +47,7 @@ export function ResumeHeader({
           </Avatar>
           <div className="flex min-w-0 flex-col gap-2">
             <Badge variant="secondary" className="w-fit">
-              {usingFallbackData ? "示例简历" : profile.title}
+              {usingFallbackData ? '示例简历' : profile.title}
             </Badge>
             <div className="flex flex-col gap-2">
               <h1 className="text-4xl font-semibold leading-tight sm:text-5xl">
@@ -62,7 +62,7 @@ export function ResumeHeader({
           </div>
         </div>
         {profile.summary ? (
-          <p className="max-w-3xl text-base leading-8 text-muted-foreground sm:text-lg">
+          <p className="max-w-3xl text-base leading-8 text-muted-foreground sm:text-lg whitespace-pre-wrap">
             {profile.summary}
           </p>
         ) : null}
@@ -124,6 +124,7 @@ function ProfileLinks({ links }: { links: ResumeLink[] }) {
 function ExternalTextLink({ link }: { link: ResumeLink }) {
   return (
     <a
+      key={link.id}
       href={link.url}
       target="_blank"
       rel="noreferrer noopener"
