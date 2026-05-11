@@ -1,7 +1,5 @@
 import type { ReactNode } from "react";
 
-import { Badge } from "@/components/ui/badge";
-
 type ResumeSectionProps = {
   eyebrow: string;
   title: string;
@@ -16,19 +14,19 @@ export function ResumeSection({
   children,
 }: ResumeSectionProps) {
   return (
-    <section className="flex flex-col gap-5">
-      <div className="flex flex-col gap-2">
-        <Badge variant="secondary" className="w-fit">
+    <section className="flex flex-col gap-6">
+      <div className="flex flex-col gap-1">
+        <span className="text-xs font-semibold uppercase tracking-widest text-primary">
           {eyebrow}
-        </Badge>
-        <div className="flex flex-col gap-1">
-          <h2 className="text-2xl font-semibold leading-tight">{title}</h2>
-          {description ? (
-            <p className="text-sm leading-6 text-muted-foreground">
-              {description}
-            </p>
-          ) : null}
-        </div>
+        </span>
+        <h2 className="text-xl font-semibold leading-tight text-foreground">
+          {title}
+        </h2>
+        {description ? (
+          <p className="text-sm leading-6 text-muted-foreground">
+            {description}
+          </p>
+        ) : null}
       </div>
       {children}
     </section>

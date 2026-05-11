@@ -1,12 +1,4 @@
 import { Badge } from "@/components/ui/badge";
-import {
-  Card,
-  CardAction,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { formatDateRange } from "@/lib/resume/formatters";
 import type { WorkExperience } from "@/lib/resume/types";
 
@@ -24,44 +16,47 @@ type ExperienceCardProps = {
 
 export function ExperienceCard({ experience }: ExperienceCardProps) {
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>{experience.role}</CardTitle>
-        <CardDescription>
-          {experience.company}
-          {experience.location ? ` · ${experience.location}` : ""}
-        </CardDescription>
-        <CardAction>
-          <Badge variant={experience.isCurrent ? "default" : "outline"}>
-            {experience.isCurrent ? "当前" : formatDateRange(experience)}
-          </Badge>
-        </CardAction>
-      </CardHeader>
-      <CardContent className="flex flex-col gap-4">
-        <div className="flex flex-wrap gap-2">
-          {!experience.isCurrent ? null : (
-            <Badge variant="outline">{formatDateRange(experience)}</Badge>
-          )}
+    <article className="flex flex-col gap-3 py-6 first:pt-0 last:pb-0">
+      {/* header row */}
+      <div className="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between sm:gap-4">
+        <div className="flex flex-col gap-0.5">
+          <h3 className="font-semibold text-foreground">{experience.role}</h3>
+          <p className="text-sm text-muted-foreground">
+            {experience.company}
+            {experience.location ? ` · ${experience.location}` : ""}
+          </p>
+        </div>
+        <div className="flex shrink-0 flex-wrap items-center gap-2">
+          <span className="text-sm tabular-nums text-muted-foreground">
+            {formatDateRange(experience)}
+          </span>
+          {experience.isCurrent ? (
+            <Badge variant="default" className="text-xs">当前</Badge>
+          ) : null}
           {experience.employmentType ? (
-            <Badge variant="secondary">
+            <Badge variant="secondary" className="text-xs">
               {employmentTypeLabels[experience.employmentType] ??
                 experience.employmentType}
             </Badge>
           ) : null}
         </div>
-        {experience.summary ? (
-          <p className="leading-7 text-muted-foreground">
-            {experience.summary}
-          </p>
-        ) : null}
-        {experience.highlights.length > 0 ? (
-          <ul className="flex list-disc flex-col gap-2 pl-5 leading-7 text-muted-foreground">
-            {experience.highlights.map((highlight) => (
-              <li key={highlight}>{highlight}</li>
-            ))}
-          </ul>
-        ) : null}
-      </CardContent>
-    </Card>
+      </div>
+
+      {/* summary */}
+      {experience.summary ? (
+        <p className="text-sm leading-7 text-muted-foreground">
+          {experience.summary}
+        </p>
+      ) : null}
+
+      {/* highlights */}
+      {experience.highlights.length > 0 ? (
+        <ul className="flex list-disc flex-col gap-1.5 pl-5 text-sm leading-7 text-muted-foreground">
+          {experience.highlights.map((highlight) => (
+            <li key={highlight}>{highlight}</li>
+          ))}
+        </ul>
+      ) : null}
+    </article>
   );
 }

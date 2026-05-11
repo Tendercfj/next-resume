@@ -5,14 +5,11 @@ import {
   Mail,
   MapPin,
   Phone,
-  Sparkles,
 } from 'lucide-react';
 
 import { PrintButton } from '@/components/print-button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Separator } from '@/components/ui/separator';
 import { getInitials } from '@/lib/resume/formatters';
 import { getProfileLinks } from '@/lib/resume/profile-links';
 import type { ResumeLink, ResumeProfile } from '@/lib/resume/types';
@@ -29,53 +26,88 @@ export function ResumeHeader({
   usingFallbackData,
 }: ResumeHeaderProps) {
   const contactItems = getContactItems(profile);
+  const profileLinks = getProfileLinks(profile, links);
 
   return (
-    <header className="grid gap-8 lg:grid-cols-[1fr_320px] lg:items-end">
-      <div className="flex flex-col gap-7">
-        <div className="flex flex-col gap-5 sm:flex-row sm:items-center">
-          <Avatar className="size-20" size="lg">
+    <header className="flex flex-col gap-8">
+      {/* top row: avatar + name + links */}
+      <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
+        {/* left: avatar + name */}
+        <div className="flex items-center gap-5">
+          <Avatar className="size-16 shrink-0" size="lg">
             {profile.avatarUrl ? (
               <AvatarImage
                 src={profile.avatarUrl}
                 alt={`${profile.ownerName} 的头像`}
               />
             ) : null}
-            <AvatarFallback className="text-lg">
+            <AvatarFallback className="text-base font-medium">
               {getInitials(profile.ownerName)}
             </AvatarFallback>
           </Avatar>
-          <div className="flex min-w-0 flex-col gap-2">
-            <Badge variant="secondary" className="w-fit">
-              {usingFallbackData ? '示例简历' : profile.title}
-            </Badge>
-            <div className="flex flex-col gap-2">
-              <h1 className="text-4xl font-semibold leading-tight sm:text-5xl">
-                {profile.ownerName}
-              </h1>
-              {profile.headline ? (
-                <p className="text-xl text-muted-foreground">
-                  {profile.headline}
-                </p>
-              ) : null}
-            </div>
+          <div className="flex flex-col gap-1">
+            {usingFallbackData ? (
+              <span className="text-xs font-medium uppercase tracking-widest text-primary">
+                示例简历
+              </span>
+            ) : profile.title ? (
+              <span className="text-xs font-medium uppercase tracking-widest text-primary">
+                {profile.title}
+              </span>
+            ) : null}
+            <h1 className="text-3xl font-semibold leading-tight sm:text-4xl">
+              {profile.ownerName}
+            </h1>
+            {profile.headline ? (
+              <p className="text-base text-muted-foreground">
+                {profile.headline}
+              </p>
+            ) : null}
           </div>
         </div>
-        {profile.summary ? (
-          <p className="max-w-3xl text-base leading-8 text-muted-foreground sm:text-lg whitespace-pre-wrap">
-            {profile.summary}
-          </p>
+
+        {/* right: profile links */}
+        {profileLinks.length > 0 ? (
+          <nav
+            aria-label="个人链接"
+            className="flex flex-col gap-0.5 sm:items-end"
+          >
+            {profileLinks.map((link) => (
+              <a
+                key={link.id}
+                href={link.url}
+                target="_blank"
+                rel="noreferrer noopener"
+                className="inline-flex cursor-pointer items-center gap-1.5 text-sm text-muted-foreground transition-colors duration-200 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
+              >
+                <Globe2 className="size-3.5 shrink-0" aria-hidden="true" />
+                <span>{link.label}</span>
+                <ArrowUpRight className="size-3.5 shrink-0" aria-hidden="true" />
+              </a>
+            ))}
+          </nav>
         ) : null}
-        <div className="flex flex-wrap gap-2">
+      </div>
+
+      {/* summary */}
+      {profile.summary ? (
+        <p className="max-w-2xl text-base leading-8 text-muted-foreground whitespace-pre-wrap">
+          {profile.summary}
+        </p>
+      ) : null}
+
+      {/* contact + actions row */}
+      <div className="flex flex-wrap items-center justify-between gap-4">
+        <div className="flex flex-wrap gap-x-5 gap-y-2">
           {contactItems.map((item) => (
-            <ContactBadge key={item.label} item={item} />
+            <ContactItem key={item.label} item={item} />
           ))}
         </div>
-        <div className="flex flex-col gap-3 print:hidden sm:flex-row">
+        <div className="flex gap-2 print:hidden">
           {profile.email ? (
-            <Button asChild className="cursor-pointer">
+            <Button asChild size="sm" className="cursor-pointer">
               <a href={`mailto:${profile.email}`}>
-                <Mail data-icon="inline-start" />
+                <Mail className="size-3.5" aria-hidden="true" />
                 联系我
               </a>
             </Button>
@@ -83,7 +115,6 @@ export function ResumeHeader({
           <PrintButton />
         </div>
       </div>
-      <ProfileLinks links={getProfileLinks(profile, links)} />
     </header>
   );
 }
@@ -93,71 +124,20 @@ type ContactItem = {
   icon: LucideIcon;
 };
 
-function ContactBadge({ item }: { item: ContactItem }) {
+function ContactItem({ item }: { item: ContactItem }) {
   const Icon = item.icon;
-
   return (
-    <Badge variant="outline" className="gap-1.5">
-      <Icon className="size-3.5" aria-hidden="true" />
-      <span className="max-w-[18rem] truncate">{item.label}</span>
-    </Badge>
-  );
-}
-
-function ProfileLinks({ links }: { links: ResumeLink[] }) {
-  return (
-    <aside className="flex flex-col gap-3 rounded-lg border bg-card p-4 text-sm shadow-sm">
-      <div className="flex items-center gap-2 font-medium">
-        <Sparkles className="size-4 text-primary" aria-hidden="true" />
-        快速入口
-      </div>
-      <Separator />
-      <div className="flex flex-col gap-1">
-        {links.map((link) => (
-          <ExternalTextLink key={link.label} link={link} />
-        ))}
-      </div>
-    </aside>
-  );
-}
-
-function ExternalTextLink({ link }: { link: ResumeLink }) {
-  return (
-    <a
-      key={link.id}
-      href={link.url}
-      target="_blank"
-      rel="noreferrer noopener"
-      className="flex min-w-0 cursor-pointer items-center justify-between gap-3 rounded-md px-2 py-2 text-muted-foreground transition-colors duration-200 hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
-    >
-      <span className="flex min-w-0 items-center gap-2">
-        <Globe2 className="size-4 shrink-0" aria-hidden="true" />
-        <span className="truncate">{link.label}</span>
-      </span>
-      <ArrowUpRight className="size-4 shrink-0" aria-hidden="true" />
-    </a>
+    <span className="inline-flex items-center gap-1.5 text-sm text-muted-foreground">
+      <Icon className="size-3.5 shrink-0" aria-hidden="true" />
+      {item.label}
+    </span>
   );
 }
 
 function getContactItems(profile: ResumeProfile): ContactItem[] {
   return [
-    profile.location
-      ? {
-          label: profile.location,
-          icon: MapPin,
-        }
-      : null,
-    profile.email
-      ? {
-          label: profile.email,
-          icon: Mail,
-        }
-      : null,
-    profile.phone
-      ? {
-          label: profile.phone,
-          icon: Phone,
-        }
-      : null,
+    profile.location ? { label: profile.location, icon: MapPin } : null,
+    profile.email ? { label: profile.email, icon: Mail } : null,
+    profile.phone ? { label: profile.phone, icon: Phone } : null,
   ].filter(Boolean) as ContactItem[];
 }

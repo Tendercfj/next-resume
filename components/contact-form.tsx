@@ -108,7 +108,7 @@ export function ContactForm({ resumeSlug }: ContactFormProps) {
           aria-invalid={hasError("message")}
           disabled={pending}
           required
-          className="min-h-28 resize-y"
+          className="min-h-20 resize-y"
         />
         <FieldDescription>
           表单会通过 Server Action 写入联系消息，不会在前端暴露数据库细节。
