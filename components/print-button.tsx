@@ -9,7 +9,7 @@ export function PrintButton() {
     <Button
       type="button"
       variant="outline"
-      className="cursor-pointer"
+      className="cursor-pointer rounded-full"
       onClick={() => window.print()}
     >
       <Download data-icon="inline-start" />

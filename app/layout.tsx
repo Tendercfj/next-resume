@@ -12,8 +12,27 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="zh-CN" className="h-full antialiased">
-      <body className="min-h-full flex flex-col">{children}</body>
+    <html lang="zh-CN" className="h-full antialiased" suppressHydrationWarning>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+try {
+  const key = 'next-resume-theme';
+  const stored = localStorage.getItem(key);
+  const theme = stored === 'light' || stored === 'dark'
+    ? stored
+    : (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  document.documentElement.classList.toggle('dark', theme === 'dark');
+  document.documentElement.style.colorScheme = theme;
+} catch {}
+`,
+          }}
+        />
+      </head>
+      <body className="flex min-h-full flex-col print:block print:min-h-0">
+        {children}
+      </body>
     </html>
   );
 }
