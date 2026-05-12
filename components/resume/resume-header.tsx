@@ -94,7 +94,7 @@ export function ResumeHeader({
           ))}
         </div>
 
-        <div className="flex flex-wrap gap-2 print:hidden">
+        <div className="flex flex-wrap items-center gap-2 print:hidden">
           <ThemeToggle />
           {profile.email ? (
             <Button asChild size="sm" className="cursor-pointer rounded-full">
