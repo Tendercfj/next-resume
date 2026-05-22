@@ -17,8 +17,14 @@ export function ResumePage({ resume, usingFallbackData }: ResumePageProps) {
     featuredProjects.length > 0 ? featuredProjects : resume.projects.slice(0, 3);
 
   return (
-    <main className="resume-print-shell min-h-screen bg-muted/40 px-4 py-5 text-foreground transition-colors sm:px-6 sm:py-10 dark:bg-[#050504] print:min-h-0 print:bg-white print:p-0">
-      <article className="resume-print-sheet mx-auto w-full max-w-6xl rounded-[1.5rem] bg-background px-5 py-7 shadow-[0_24px_80px_rgba(15,23,42,0.08)] ring-1 ring-border/80 transition-colors sm:px-9 sm:py-10 lg:px-12 lg:py-12 dark:bg-[#10100e] dark:shadow-[0_24px_90px_rgba(0,0,0,0.5)] dark:ring-white/10 print:max-w-none print:rounded-none print:bg-white print:px-0 print:py-0 print:text-black print:shadow-none print:ring-0">
+    <main className="resume-print-shell relative min-h-screen overflow-hidden bg-background/50 px-4 py-6 text-foreground transition-colors sm:px-6 sm:py-12 print:min-h-0 print:bg-white print:p-0">
+      {/* Premium ambient glow backdrops - hidden in print */}
+      <div className="pointer-events-none absolute inset-x-0 top-0 -z-10 flex justify-between overflow-hidden opacity-40 blur-[120px] dark:opacity-30 print:hidden">
+        <div className="h-[400px] w-[400px] -translate-x-[20%] -translate-y-[20%] rounded-full bg-primary/15" />
+        <div className="h-[350px] w-[350px] translate-x-[20%] -translate-y-[10%] rounded-full bg-primary/10" />
+      </div>
+
+      <article className="resume-print-sheet mx-auto w-full max-w-6xl animate-in fade-in slide-in-from-bottom-8 duration-1000 ease-out fill-mode-both rounded-[2rem] bg-card px-5 py-8 shadow-[0_32px_96px_rgba(15,23,42,0.06)] ring-1 ring-border/50 transition-colors sm:px-10 sm:py-12 lg:px-14 lg:py-14 dark:shadow-[0_32px_96px_rgba(0,0,0,0.35)] dark:ring-white/5 print:max-w-none print:rounded-none print:bg-white print:px-0 print:py-0 print:text-black print:shadow-none print:ring-0">
         <ResumeHeader
           profile={resume.profile}
           links={resume.links}
@@ -38,7 +44,7 @@ export function ResumePage({ resume, usingFallbackData }: ResumePageProps) {
             </ResumeSection>
 
             <ResumeSection eyebrow="Work Experience" title="工作经历">
-              <div className="flex flex-col divide-y divide-border">
+              <div className="relative ml-3.5 flex flex-col gap-8 border-l border-border/60 pl-6 py-1.5 print:ml-0 print:border-l-0 print:pl-0 print:gap-4">
                 {resume.workExperiences.map((experience) => (
                   <ExperienceCard
                     key={experience.id}
@@ -49,7 +55,7 @@ export function ResumePage({ resume, usingFallbackData }: ResumePageProps) {
             </ResumeSection>
 
             <ResumeSection eyebrow="Portfolio" title="代表项目">
-              <div className="flex flex-col divide-y divide-border">
+              <div className="relative ml-3.5 flex flex-col gap-8 border-l border-border/60 pl-6 py-1.5 print:ml-0 print:border-l-0 print:pl-0 print:gap-4">
                 {projects.map((project) => (
                   <ProjectCard key={project.id} project={project} />
                 ))}

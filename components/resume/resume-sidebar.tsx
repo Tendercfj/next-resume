@@ -152,21 +152,41 @@ function SkillGroupBlock({
   );
 }
 
+function SkillLevelDots({ level }: { level: "familiar" | "proficient" | "expert" }) {
+  const total = 3;
+  const filled = level === "expert" ? 3 : level === "proficient" ? 2 : 1;
+  return (
+    <div className="flex gap-1 items-center print:hidden" aria-label={`熟练度: ${skillLevelLabels[level]}`}>
+      {Array.from({ length: total }).map((_, i) => (
+        <span
+          key={i}
+          className={`h-1.5 w-1.5 rounded-full transition-all duration-500 ${
+            i < filled ? "bg-primary" : "bg-muted-foreground/20"
+          }`}
+        />
+      ))}
+    </div>
+  );
+}
+
 function SkillItemRow({ item }: { item: SkillItem }) {
   return (
-    <div className="flex flex-col gap-2 print:gap-0.5">
-      <div className="flex flex-wrap items-baseline justify-between gap-2">
-        <span className="text-sm font-medium text-foreground print:text-[0.72rem]">
+    <div className="group/skill flex flex-col gap-1.5 print:gap-0.5">
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <span className="text-sm font-semibold text-foreground transition-colors duration-300 group-hover/skill:text-primary print:text-[0.72rem]">
           {item.name}
         </span>
         {item.level ? (
-          <span className="text-xs text-muted-foreground print:text-[0.64rem]">
-            {skillLevelLabels[item.level]}
-          </span>
+          <>
+            <SkillLevelDots level={item.level} />
+            <span className="hidden text-[0.64rem] font-medium text-muted-foreground print:inline">
+              {skillLevelLabels[item.level]}
+            </span>
+          </>
         ) : null}
       </div>
       {item.keywords.length > 0 ? (
-        <p className="text-xs leading-5 text-muted-foreground print:text-[0.64rem] print:leading-4">
+        <p className="text-xs leading-5 text-muted-foreground/90 print:text-[0.64rem] print:leading-4">
           {item.keywords.join(" / ")}
         </p>
       ) : null}
@@ -176,24 +196,26 @@ function SkillItemRow({ item }: { item: SkillItem }) {
 
 function EducationItem({ education }: { education: Education }) {
   return (
-    <div className="flex flex-col gap-1 py-5 first:pt-0 last:pb-0 print:py-2.5">
-      <div className="flex items-start gap-2">
-        <GraduationCap
-          className="mt-0.5 size-4 shrink-0 text-primary"
-          aria-hidden="true"
-        />
-        <div className="flex flex-col gap-0.5">
-          <span className="text-sm font-medium text-foreground print:text-[0.72rem]">
+    <div className="group/edu flex flex-col gap-1 py-4 first:pt-0 last:pb-0 print:py-2">
+      <div className="flex items-start gap-3">
+        <div className="mt-0.5 flex h-7.5 w-7.5 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary transition-all duration-300 group-hover/edu:bg-primary group-hover/edu:text-primary-foreground print:mt-0 print:h-auto print:w-auto print:bg-transparent print:text-primary">
+          <GraduationCap
+            className="size-4 shrink-0 transition-transform duration-300 group-hover/edu:scale-110"
+            aria-hidden="true"
+          />
+        </div>
+        <div className="flex min-w-0 flex-col gap-0.5">
+          <span className="text-sm font-bold text-foreground transition-colors duration-300 group-hover/edu:text-primary print:text-[0.72rem]">
             {education.school}
           </span>
-          <span className="text-xs text-muted-foreground print:text-[0.64rem]">
+          <span className="text-xs font-semibold text-muted-foreground print:text-[0.64rem]">
             {[education.degree, education.major].filter(Boolean).join(" · ")}
           </span>
-          <span className="text-xs tabular-nums text-muted-foreground print:text-[0.64rem]">
+          <span className="text-[0.7rem] font-medium tabular-nums text-muted-foreground print:text-[0.64rem]">
             {formatDateRange(education)}
           </span>
           {education.description ? (
-            <p className="mt-1 text-xs leading-5 text-muted-foreground print:text-[0.64rem] print:leading-4">
+            <p className="mt-1 text-xs leading-5 text-muted-foreground/90 print:text-[0.64rem] print:leading-4">
               {education.description}
             </p>
           ) : null}
@@ -209,17 +231,19 @@ function CertificationItem({
   certification: Certification;
 }) {
   return (
-    <div className="flex flex-col gap-1 py-5 first:pt-0 last:pb-0 print:py-2.5">
-      <div className="flex items-start gap-2">
-        <Award
-          className="mt-0.5 size-4 shrink-0 text-primary"
-          aria-hidden="true"
-        />
-        <div className="flex flex-col gap-0.5">
-          <span className="text-sm font-medium text-foreground print:text-[0.72rem]">
+    <div className="group/cert flex flex-col gap-1 py-4 first:pt-0 last:pb-0 print:py-2">
+      <div className="flex items-start gap-3">
+        <div className="mt-0.5 flex h-7.5 w-7.5 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary transition-all duration-300 group-hover/cert:bg-primary group-hover/cert:text-primary-foreground print:mt-0 print:h-auto print:w-auto print:bg-transparent print:text-primary">
+          <Award
+            className="size-4 shrink-0 transition-transform duration-300 group-hover/cert:scale-110"
+            aria-hidden="true"
+          />
+        </div>
+        <div className="flex min-w-0 flex-col gap-0.5">
+          <span className="text-sm font-bold text-foreground transition-colors duration-300 group-hover/cert:text-primary print:text-[0.72rem]">
             {certification.title}
           </span>
-          <span className="text-xs text-muted-foreground print:text-[0.64rem]">
+          <span className="text-xs font-semibold text-muted-foreground print:text-[0.64rem]">
             {[certification.issuer, formatMonth(certification.issuedOn)]
               .filter(Boolean)
               .join(" · ")}
